@@ -19,6 +19,10 @@ fun Project.applyMavenPublish() {
     val signingSecretKeyRingFile: String = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
     val signingPassword: String = System.getenv("SIGNING_PASSWORD")
 
+    // pom
+    val pomDescription = "A library for parsing Tagged Image File Format (Tiff) files"
+    val pomUrl = "https://github.com/granular-oss/tiffany"
+
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
 
@@ -51,9 +55,9 @@ fun Project.applyMavenPublish() {
 
                 pom {
                     name.set(project.name)
-                    description.set("A library for parsing Tagged Image File Format (Tiff) files")
+                    description.set(pomDescription)
 
-                    url.set("https://github.com/granular-oss/tiffany")
+                    url.set(pomUrl)
                     licenses {
                         license {
                             name.set("The Apache Software License, Version 2.0")
@@ -62,7 +66,7 @@ fun Project.applyMavenPublish() {
                         }
                     }
                     scm {
-                        url.set("https://github.com/granular-oss/tiffany")
+                        url.set(pomUrl)
                         connection.set("scm:git:git://github.com/granular-oss/tiffany.git")
                         developerConnection.set("scm:git:ssh://git@granular-oss/tiffany.git")
                     }
