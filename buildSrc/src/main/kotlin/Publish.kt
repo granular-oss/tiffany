@@ -60,8 +60,8 @@ fun Project.applyMavenPublish() {
                     url.set(pomUrl)
                     licenses {
                         license {
-                            name.set("The Apache Software License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                            name.set("The MIT License (MIT)")
+                            url.set("https://raw.githubusercontent.com/granular-oss/tiffany/master/LICENSE")
                             distribution.set("repo")
                         }
                     }
