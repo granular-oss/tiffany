@@ -12,12 +12,12 @@ import org.gradle.plugins.signing.SigningExtension
 fun Project.applyMavenPublish() {
 
     // Environment variables
-    val repositoryUsername: String = System.getenv("SONATYPE_USERNAME")
-    val repositoryPassword: String = System.getenv("SONATYPE_PASSWORD")
+    val repositoryUsername: String? = System.getenv("SONATYPE_USERNAME")
+    val repositoryPassword: String? = System.getenv("SONATYPE_PASSWORD")
 
-    val signingKeyId: String = System.getenv("SIGNING_KEY_ID")
-    val signingSecretKeyRingFile: String = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
-    val signingPassword: String = System.getenv("SIGNING_PASSWORD")
+    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
+    val signingSecretKeyRingFile: String? = System.getenv("SIGNING_SECRET_KEY_RING_FILE")
+    val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
 
     // pom
     val pomDescription = "A library for parsing Tagged Image File Format (Tiff) files"
