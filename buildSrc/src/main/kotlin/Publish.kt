@@ -21,7 +21,8 @@ fun Project.applyMavenPublish() {
 
     // pom
     val pomDescription = "A library for parsing Tagged Image File Format (Tiff) files"
-    val pomUrl = "https://github.com/granular-oss/tiffany"
+    val gitUrl = "github.com/granular-oss/tiffany"
+    val pomUrl = "https://$gitUrl"
 
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
@@ -60,15 +61,15 @@ fun Project.applyMavenPublish() {
                     url.set(pomUrl)
                     licenses {
                         license {
-                            name.set("The Apache Software License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                            name.set("The MIT License (MIT)")
+                            url.set("https://raw.githubusercontent.com/granular-oss/tiffany/master/LICENSE")
                             distribution.set("repo")
                         }
                     }
                     scm {
                         url.set(pomUrl)
-                        connection.set("scm:git:git://github.com/granular-oss/tiffany.git")
-                        developerConnection.set("scm:git:ssh://git@granular-oss/tiffany.git")
+                        connection.set("scm:git:git://$gitUrl.git")
+                        developerConnection.set("scm:git:ssh://git@$gitUrl.git")
                     }
                     developers {
                         developer {
