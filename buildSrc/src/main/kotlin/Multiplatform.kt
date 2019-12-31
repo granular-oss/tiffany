@@ -16,13 +16,7 @@ fun Project.applyCommonMultiplatform() {
     configure<KotlinMultiplatformExtension> {
         targets.apply {
             add(jvm())
-            add(iosX64("native"){
-                binaries {
-                    executable {
-                        freeCompilerArgs.add("-opt")
-                    }
-                }
-            })
+            add(iosX64("native"))
             add(iosArm64())
             add(iosArm32())
         }
