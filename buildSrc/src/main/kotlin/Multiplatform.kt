@@ -7,7 +7,7 @@ import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.konan.target.HostManager
+//import org.jetbrains.kotlin.konan.target.HostManager
 
 fun Project.applyCommonMultiplatform() {
 
@@ -83,7 +83,7 @@ fun Project.applyCommonMultiplatform() {
 
 
     // iOS Test Runner
-    if (HostManager.hostIsMac) {
+//    if (HostManager.hostIsMac) {
 
         // A hack to copy resources for native tests
         val copyResourcesForNative = tasks.register<Copy>("copyResourcesForNative") {
@@ -111,5 +111,5 @@ fun Project.applyCommonMultiplatform() {
         tasks.getByName("check") {
             dependsOn(testIosSim)
         }
-    }
+//    }
 }
