@@ -1,13 +1,9 @@
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
-import org.gradle.api.tasks.Exec
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.konan.target.HostManager
 
 fun Project.applyCommonMultiplatform() {
 
@@ -25,7 +21,6 @@ fun Project.applyCommonMultiplatform() {
 
             named("commonMain") {
                 dependencies {
-                    implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
                 }
             }
             named("commonTest") {
@@ -41,7 +36,6 @@ fun Project.applyCommonMultiplatform() {
 
             named("jvmMain") {
                 dependencies {
-                    implementation("org.jetbrains.kotlin:kotlin-stdlib")
                 }
             }
 
@@ -70,46 +64,14 @@ fun Project.applyCommonMultiplatform() {
 //        }
     }
 
-
-    // A hack to copy resources for JVM tests
-    tasks.register<Copy>("copyResourcesForJvm") {
+    // A hack to copy resources for native tests
+    val copyResourcesForNative = tasks.register<Copy>("copyResourcesForNative") {
         from("$projectDir/src/commonTest/resources/")
-        into("$buildDir/classes/kotlin/jvm/test/")
+        into("$buildDir/bin/native/debugTest/")
     }
 
-    tasks.named("jvmTest") {
-        dependsOn(tasks.getByName("copyResourcesForJvm"))
+    tasks.named("nativeTest") {
+        dependsOn(copyResourcesForNative)
     }
 
-
-    // iOS Test Runner
-    if (HostManager.hostIsMac) {
-
-        // A hack to copy resources for native tests
-        val copyResourcesForNative = tasks.register<Copy>("copyResourcesForNative") {
-            from("$projectDir/src/commonTest/resources/")
-            into("$buildDir/bin/native/debugTest/")
-        }
-
-        val linkDebugTestNative = tasks.getByName("linkDebugTestNative", KotlinNativeLink::class)
-
-        val testIosSim = tasks.register<Exec>("iosTest") {
-            group = "verification"
-            dependsOn(linkDebugTestNative, copyResourcesForNative)
-            executable = "xcrun"
-            setArgs(
-                listOf(
-                    "simctl",
-                    "spawn",
-                    "-s",
-                    "iPad Air 2",
-                    linkDebugTestNative.outputFile.get()
-                )
-            )
-        }
-
-        tasks.getByName("check") {
-            dependsOn(testIosSim)
-        }
-    }
 }
