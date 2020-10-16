@@ -1,6 +1,8 @@
 import org.gradle.api.Project
+import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 fun Project.applyCommonMultiplatform() {
@@ -61,4 +63,15 @@ fun Project.applyCommonMultiplatform() {
 //            }
 //        }
     }
+
+    // A hack to copy resources for native tests
+    val copyResourcesForNative = tasks.register<Copy>("copyResourcesForNative") {
+        from("$projectDir/src/commonTest/resources/")
+        into("$buildDir/bin/native/debugTest/")
+    }
+
+    tasks.named("nativeTest") {
+        dependsOn(copyResourcesForNative)
+    }
+
 }
