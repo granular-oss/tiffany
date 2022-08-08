@@ -1,9 +1,13 @@
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.testing.AbstractTestTask
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
+import java.io.File
 
 fun Project.applyCommonMultiplatform() {
 
@@ -15,6 +19,7 @@ fun Project.applyCommonMultiplatform() {
             add(iosX64("native"))
             add(iosArm64())
             add(iosArm32())
+            add(iosSimulatorArm64())
         }
 
         sourceSets.apply {
@@ -46,7 +51,7 @@ fun Project.applyCommonMultiplatform() {
                 }
             }
 
-            listOf("iosArm64", "iosArm32").forEach {
+            listOf("iosArm64", "iosArm32", "iosSimulatorArm64").forEach {
                 getByName("${it}Main") {
                     dependsOn(getByName("nativeMain"))
                 }
@@ -64,14 +69,23 @@ fun Project.applyCommonMultiplatform() {
 //        }
     }
 
-    // A hack to copy resources for native tests
-    val copyResourcesForNative = tasks.register<Copy>("copyResourcesForNative") {
-        from("$projectDir/src/commonTest/resources/")
-        into("$buildDir/bin/native/debugTest/")
+    tasks.withType<KotlinNativeTest> {
+        val frameworkDir = executable.parentFile
+
+        // A hack to copy resources for native tests
+        val copyResources = tasks.register<Copy>("copyResourcesFor${name.capitalize()}") {
+            from("$projectDir/src/commonTest/resources/")
+            into(frameworkDir)
+        }
+        dependsOn(copyResources)
     }
 
-    tasks.named("nativeTest") {
-        dependsOn(copyResourcesForNative)
+    tasks.withType<AbstractTestTask>().configureEach {
+        testLogging {
+            events("started", "skipped", "passed", "failed")
+            setExceptionFormat("full")
+            showStandardStreams = true
+        }
     }
 
 }

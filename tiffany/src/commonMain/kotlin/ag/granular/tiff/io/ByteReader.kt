@@ -83,7 +83,7 @@ class ByteReader(
      * @throws UnsupportedEncodingException
      */
 //    @Throws(UnsupportedEncodingException::class)
-    @UseExperimental(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class)
     fun readString(offset: Int, num: Int): String? = verifyRemainingBytes(offset, num) {
         if (num != 1 || bytes[offset].toInt() != 0) {
             bytes.decodeToString(offset, offset + num)

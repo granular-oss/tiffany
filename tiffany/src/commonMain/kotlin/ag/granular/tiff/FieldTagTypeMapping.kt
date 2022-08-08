@@ -923,7 +923,7 @@ class FieldTagTypeMapping(
         var maxValue: Int? = null
         val values = getIntegerListEntryValue(fieldTagType)
         if (values != null) {
-            maxValue = values.max()
+            maxValue = values.maxOrNull()
         }
         return maxValue
     }

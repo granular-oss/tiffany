@@ -34,10 +34,6 @@ fun Project.applyMavenPublish() {
 
     val isReleaseBuild = !versionName.contains("SNAPSHOT")
 
-    val emptySourcesJar = tasks.register<Jar>("emptySourcesJar") {
-        classifier = "sources"
-    }
-
     val emptyJavadocJar = tasks.register<Jar>("emptyJavadocJar") {
         classifier = "javadoc"
     }
@@ -77,15 +73,6 @@ fun Project.applyMavenPublish() {
                             name.set("Vladimir Lavruk")
                         }
                     }
-                }
-            }
-        }
-
-        afterEvaluate {
-            publications.getByName("kotlinMultiplatform") {
-                // Source jars are only created for platforms, not the common artifact.
-                if (this is MavenPublication) {
-                    artifact(emptySourcesJar.get())
                 }
             }
         }

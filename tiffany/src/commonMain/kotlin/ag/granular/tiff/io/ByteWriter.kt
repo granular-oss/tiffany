@@ -22,7 +22,7 @@ class ByteWriter(
     fun size(): Int = os.size()
 
     //    @Throws(IOException::class)
-    @UseExperimental(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalStdlibApi::class)
     fun writeString(value: String): Int {
         val valueBytes = value.encodeToByteArray()
         os.write(valueBytes)
